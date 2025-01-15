@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@-_8u)%t$0vn2ucc!*olld)+%t^9mzsl2@%9(sb)3-7bqw#@rk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ahnxd.com', 'devsearch.ahnxd.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ahnxd.com', 'devsearch.ahnxd.com', 'devsearch-wf2h.onrender.com']
 
 
 # Application definition
@@ -166,7 +166,8 @@ USE_TZ = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-EMAIL_BACKEND = 'django.core.mail.backend.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backend.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
