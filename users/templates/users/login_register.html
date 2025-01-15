@@ -11,7 +11,7 @@
                 <h3>Account SignUp</h3>
                 <p>Create a new developer account</p>
             </div>
-            <form action="{% url "Register" %}" method="post" class="form auth__form">
+            <form action="{% url 'Register' %}" method="post" class="form auth__form">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="form__field">
@@ -31,7 +31,7 @@
             </form>
             <div class="auth__alternative">
                 <p>Already have an Account?</p>
-                <a href="{% url "Login" %}">Log In</a>
+                <a href="{% url 'Login' %}">Log In</a>
             </div>
         </div>
     </div>
