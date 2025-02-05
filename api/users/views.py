@@ -1,10 +1,12 @@
 from rest_framework.decorators import api_view, permission_classes, parser_classes
+from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from ..serializers import ProjectSerializer, ProfileSerializer, SkillsSerializer, MessageSerializer
 from projects.models import Project, Review
 from users.models import Profile, Skill, Message
+from django.contrib.auth.models import User
 from rest_framework import status
 from ..utils import searchProfiles, paginateLogic
 
@@ -14,18 +16,18 @@ def createAccount(request):
     data = request.data
     
     try:
-        profile = Profile.objects.create(
-            name=data.get('name'),
+        user = User.objects.create_user(
             username=data.get('username'),
-            location=data.get('location'),
             email=data.get('email'),
-            short_intro=data.get('short_intro'),
-            bio=data.get('bio'),
-            social_github=data.get('social_github'),
-            social_linkedin=data.get('social_linkedin'),
-            social_youtube=data.get('social_youtube'),
-            social_website=data.get('social_website'),
+            password=data.get('password1')  # Use password1 (password2 is for confirmation)
         )
+
+        user.first_name = data.get('first_name', "") # Set first name
+        user.last_name = data.get('last_name', "") # Set last name
+        user.username = user.username.lower() # Lowercase username
+        user.save()  # Save the User object
+        
+        profile = Profile.objects.get(user=user)
         serializer = ProfileSerializer(profile)
         context = {'state': True, 'msg': 'Account created successfully', 'profile': serializer.data}
         return Response(context, status=status.HTTP_201_CREATED)
@@ -123,15 +125,17 @@ def profile(request, id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def userAccount(requset):
-    profile = ProfileSerializer(requset.user.profile, many=False)
-    projects = ProjectSerializer(profile.project_set.all(), many=True)
+    profile = requset.user.profile
+    profileSer = ProfileSerializer(profile, many=False)
+    projects = profile.project_set.all()
+    projectsSer = ProjectSerializer(projects, many=True)
     
     context = {
             'state': True,
             'msg': '',
             "data": {
-                'profile':profile, 
-                'projects':projects
+                'profile':profileSer.data, 
+                'projects':projectsSer.data
             }
     }
     return Response(context)

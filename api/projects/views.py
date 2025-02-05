@@ -166,7 +166,7 @@ def updateProject(request, id):
         }
         return Response(context, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def deleteProject(request, id):
     try:
@@ -200,9 +200,9 @@ def deleteProject(request, id):
         }
         return Response(context, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def removeTag(request, id):
+def removeTag(request):
     try:
         tag_id = request.data.get('tag')
         project_id = request.data.get('project')

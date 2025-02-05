@@ -1,5 +1,6 @@
 from django.urls import path
 from .projects import views as ProjectV
+from django.contrib.auth import views as auth_views
 from .users import views as UserV
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -12,7 +13,13 @@ urlpatterns = [
     # --------------------------
     path('users/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('users/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    # --------------------------
+    # Password Reset Routes
+    # --------------------------
+    path('users/password-reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('users/password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('users/password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('users/password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # --------------------------
     # User Actions
     # --------------------------
